@@ -4,5 +4,6 @@
     {
         WeatherForecast GetForecastInCountry();
         IEnumerable<WeatherForecast> GetForecasts(int n,int min,int max);
+
     }
 }

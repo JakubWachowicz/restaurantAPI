@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using RestaurantAPI2._0.Models;
 using RestaurantAPI2._0.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IWeatherForecastService,WeatherForecastService>();
 
-var app = builder.Build();
+
+builder.Services.AddDbContext<RestaurantDbContext>(opt => {
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+
+var app = builder.Build(); 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,5 +32,21 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<RestaurantDbContext>();
+    await context.Database.MigrateAsync();
+    DbSeederService seederService = new DbSeederService(context);
+    await seederService.Seed();
+}
+catch(Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during Migration");
+    throw;
+}
 
 app.Run();
