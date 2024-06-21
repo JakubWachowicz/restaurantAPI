@@ -10,9 +10,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<IWeatherForecastService,WeatherForecastService>();
+//builder.Services.AddTransient<IWeatherForecastService,WeatherForecastService>();
 
-
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddDbContext<RestaurantDbContext>(opt => {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
