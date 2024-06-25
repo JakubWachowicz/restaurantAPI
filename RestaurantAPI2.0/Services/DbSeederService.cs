@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestaurantAPI2._0.Models;
+using RestaurantAPI2._0.Entities;
 using System.Reflection.Metadata.Ecma335;
 
 namespace RestaurantAPI2._0.Services
@@ -15,8 +15,8 @@ namespace RestaurantAPI2._0.Services
 
         private IEnumerable<Restaurant> GenerateRestaurants()
         {
-            var address1 = new Address { Street = "123 Main St", City = "Townsville", RestaurantId = 1 };
-            var address2 = new Address { Street = "456 Elm St", City = "Cityplace", RestaurantId = 2 };
+            var address1 = new Address { Street = "123 Main St", City = "Townsville",};
+            var address2 = new Address { Street = "456 Elm St", City = "Cityplace", };
 
             // Create sample dishes for restaurant 1
             var dish1 = new Dish { Name = "Spaghetti", Description = "Classic spaghetti with tomato sauce", Price = 12.99m};
@@ -50,7 +50,6 @@ namespace RestaurantAPI2._0.Services
             return [restaurant1, restaurant2];
         }
 
-       
         public Task Seed()
         {
             //If dataBase is empty seed it with mock data

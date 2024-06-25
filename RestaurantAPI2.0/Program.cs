@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantAPI2._0.Models;
+using RestaurantAPI2._0.Entities;
 using RestaurantAPI2._0.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddTransient<IWeatherForecastService,WeatherForecastService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddDbContext<RestaurantDbContext>(opt => {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

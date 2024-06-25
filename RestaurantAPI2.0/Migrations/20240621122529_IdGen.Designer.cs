@@ -10,8 +10,8 @@ using RestaurantAPI2._0.Entities;
 namespace RestaurantAPI2._0.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20240621094237_AddressReqUpdate")]
-    partial class AddressReqUpdate
+    [Migration("20240621122529_IdGen")]
+    partial class IdGen
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,7 @@ namespace RestaurantAPI2._0.Migrations
             modelBuilder.Entity("RestaurantAPI2._0.Models.Address", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")

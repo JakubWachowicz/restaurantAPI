@@ -10,8 +10,8 @@ using RestaurantAPI2._0.Entities;
 namespace RestaurantAPI2._0.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20240621094237_AddressReqUpdate")]
-    partial class AddressReqUpdate
+    [Migration("20240625100021_NotRequiredFieldsAdded")]
+    partial class NotRequiredFieldsAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,9 +19,10 @@ namespace RestaurantAPI2._0.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Address", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Address", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
@@ -45,7 +46,7 @@ namespace RestaurantAPI2._0.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Dish", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Dish", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,7 +74,7 @@ namespace RestaurantAPI2._0.Migrations
                     b.ToTable("Dishes");
                 });
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Restaurant", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Restaurant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,7 +84,6 @@ namespace RestaurantAPI2._0.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -96,18 +96,18 @@ namespace RestaurantAPI2._0.Migrations
                     b.ToTable("Restaurants");
                 });
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Address", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Address", b =>
                 {
-                    b.HasOne("RestaurantAPI2._0.Models.Restaurant", null)
+                    b.HasOne("RestaurantAPI2._0.Entities.Restaurant", null)
                         .WithOne("Address")
-                        .HasForeignKey("RestaurantAPI2._0.Models.Address", "RestaurantId")
+                        .HasForeignKey("RestaurantAPI2._0.Entities.Address", "RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Dish", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Dish", b =>
                 {
-                    b.HasOne("RestaurantAPI2._0.Models.Restaurant", "Restaurant")
+                    b.HasOne("RestaurantAPI2._0.Entities.Restaurant", "Restaurant")
                         .WithMany("Dishes")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -116,7 +116,7 @@ namespace RestaurantAPI2._0.Migrations
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("RestaurantAPI2._0.Models.Restaurant", b =>
+            modelBuilder.Entity("RestaurantAPI2._0.Entities.Restaurant", b =>
                 {
                     b.Navigation("Address")
                         .IsRequired();
