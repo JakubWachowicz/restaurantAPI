@@ -3,6 +3,7 @@ using RestaurantAPI2._0.Entities;
 using RestaurantAPI2._0.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RestaurantAPI2._0.Exceptions;
 namespace RestaurantAPI2._0.Services
 {
     public class RestaurantService(RestaurantDbContext context, IMapper mapper) : IRestaurantService
@@ -25,27 +26,26 @@ namespace RestaurantAPI2._0.Services
         }
 
 
-        public bool DeleteRestaurant(int id)
+        public void DeleteRestaurant(int id)
         {
             var restaurant =  _context.Restaurants.FirstOrDefault(r=>r.Id ==id);
-            if (restaurant != null)
-            {
-                context.Remove(restaurant);
-                context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            if (restaurant == null) throw new NotFountException("Restaurant not found");
+            
+            context.Remove(restaurant);
+            context.SaveChangesAsync();
         }
-        public bool UpdateRestaurant(int id,RestaurantDto restaurant)
+        public void UpdateRestaurant(int id,RestaurantDto restaurant)
         {
             var foundRestaurant =  _context.Restaurants.FindAsync(id);
-            if (foundRestaurant != null)
-            {
-                mapper.Map(restaurant, foundRestaurant);
-                context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+
+            if (foundRestaurant == null) throw new NotFountException("Restaurant not found");
+            
+           
+            mapper.Map(restaurant, foundRestaurant);
+            context.SaveChangesAsync();
+         
+        
+    
         }
 
         public int CreateRestaurant(CreateRestaurantDto restaurantDto)

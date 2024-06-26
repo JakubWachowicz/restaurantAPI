@@ -5,8 +5,8 @@ namespace RestaurantAPI2._0.Services
 {
     public interface IRestaurantService
     {
-        public bool DeleteRestaurant(int id);
-        public bool UpdateRestaurant(int id, RestaurantDto restaurant);
+        public void DeleteRestaurant(int id);
+        public void UpdateRestaurant(int id, RestaurantDto restaurant);
         int CreateRestaurant(CreateRestaurantDto restaurantDto);
         IEnumerable<RestaurantDto> GetAll();
         Task<RestaurantDto> GetRestaurant(int id);

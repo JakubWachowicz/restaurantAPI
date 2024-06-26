@@ -1,0 +1,11 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/RestaurantAPI2.0/bin/Debug/net8.0
+/.vs
+/RestaurantAPI2.0/obj/Debug/net8.0
+/RestaurantAPI2.0/obj/Release/net8.0
+/RestaurantAPI2.0/obj/project.assets.json
+/RestaurantAPI2.0/obj/project.nuget.cache
+/RestaurantAPI2.0/obj/RestaurantAPI2.0.csproj.nuget.dgspec.json
