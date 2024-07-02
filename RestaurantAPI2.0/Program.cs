@@ -26,6 +26,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<ExceptionLoggerMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleWare>();
 builder.Services.AddDbContext<RestaurantDbContext>(opt => {
