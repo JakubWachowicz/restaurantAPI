@@ -61,7 +61,33 @@ namespace RestaurantAPI2._0.Services
                     _context.Restaurants.AddRangeAsync(restaurants);
                     _context.SaveChangesAsync();
                 }
+                if (!_context.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _context.Roles.AddRangeAsync(roles);
+                    _context.SaveChangesAsync();
+                }
             } return Task.CompletedTask;
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name ="User"
+                },
+                new Role()
+                {
+                    Name="Manager"
+                },
+                new Role()
+                {
+                    Name="Admin"
+                }
+            };
+            return roles;
         }
     }
 }

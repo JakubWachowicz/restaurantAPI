@@ -1,0 +1,9 @@
+﻿namespace RestaurantAPI2._0
+{
+    public class AuthenticationSettings
+    {
+        public string JwtKey { get; set; }
+        public int JwtExpireDays { get;set; }
+        public string JwtUssuer { get; set; }
+    }
+}

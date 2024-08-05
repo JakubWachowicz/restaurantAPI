@@ -4,6 +4,14 @@ using RestaurantAPI2._0.Entities;
 using RestaurantAPI2._0.Services;
 using NLog.Extensions.Logging;
 using RestaurantAPI2._0.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using RestaurantAPI2._0.Models.Validators;
+using RestaurantAPI2._0.Models;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using RestaurantAPI2._0;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +26,26 @@ builder.Services.AddSingleton<ILoggerProvider, NLogLoggerProvider>();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+AuthenticationSettings authenticationSettings = new AuthenticationSettings();
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Bearer";
+    options.DefaultScheme = "Bearer";
+    options.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtUssuer,
+        ValidAudience = authenticationSettings.JwtUssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+    }; 
+});
+builder.Services.AddControllers().AddFluentValidation();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,6 +56,9 @@ builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<ExceptionLoggerMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleWare>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>(); ;
+builder.Services.AddScoped<IAccountService, AccountService>();  
+builder.Services.AddScoped<IValidator<RegisterUserDto>,RegisterUserDtoValidator>();
 builder.Services.AddDbContext<RestaurantDbContext>(opt => {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -46,9 +76,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionLoggerMiddleware>();
 app.UseMiddleware<RequestTimeMiddleWare>();
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
@@ -66,5 +95,4 @@ catch(Exception ex)
     logger.LogError(ex, "An error occured during Migration");
     throw;
 }
-
 app.Run();
