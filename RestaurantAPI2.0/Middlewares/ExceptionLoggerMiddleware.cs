@@ -24,6 +24,10 @@ namespace RestaurantAPI2._0.Middlewares
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(ex.Message);
             }
+            catch (BadCredentialsException badRequest) {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequest.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);

@@ -28,6 +28,7 @@ builder.Services.AddSingleton<ILoggerProvider, NLogLoggerProvider>();
 
 AuthenticationSettings authenticationSettings = new AuthenticationSettings();
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "Bearer";
@@ -39,8 +40,8 @@ builder.Services.AddAuthentication(options =>
     cfg.SaveToken = true;
     cfg.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = authenticationSettings.JwtUssuer,
-        ValidAudience = authenticationSettings.JwtUssuer,
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
     }; 
 });
